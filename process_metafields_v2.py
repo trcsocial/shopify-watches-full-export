@@ -319,12 +319,29 @@ def get_watch_type(title, brand):
 
 
 def get_watch_gender(title, size):
-    """Return 'Ladies' if applicable, else empty string."""
+    """
+    Ladies  : title contains ladies/lady/women's keyword, OR size < 33mm
+    Unisex  : 34mm – 38mm
+    Men     : > 38mm
+    """
     title_lower = title.lower()
-    if 'ladies' in title_lower or 'lady' in title_lower or "women's" in title_lower or 'womens' in title_lower:
+    is_ladies_keyword = (
+        'ladies' in title_lower or
+        'lady' in title_lower or
+        "women's" in title_lower or
+        'womens' in title_lower
+    )
+
+    if is_ladies_keyword or (size and size in LADIES_SIZES):
         return 'Ladies'
-    if size and size in LADIES_SIZES:
-        return 'Ladies'
+
+    if size:
+        mm = int(size.replace('mm', ''))
+        if 34 <= mm <= 38:
+            return 'Unisex'
+        if mm > 38:
+            return 'Men'
+
     return ''
 
 
