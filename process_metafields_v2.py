@@ -249,7 +249,7 @@ def get_watch_type(title):
         if pattern.search(title) and canonical not in seen_canonical:
             seen.append(canonical)
             seen_canonical.add(canonical)
-    return ' / '.join(seen)
+    return '\n'.join(seen)
 
 
 def get_watch_gender(title, size):
