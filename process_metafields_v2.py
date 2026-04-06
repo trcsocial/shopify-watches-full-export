@@ -69,30 +69,90 @@ MOVEMENT_MAP = {
 def normalise_movement(raw):
     return MOVEMENT_MAP.get(raw.strip().lower(), raw.strip().title())
 
-# ── Watch type keyword map (order = priority; multiple matches joined with " / ") ──
+# ── Watch type rules — maps to the agreed value set ──────────────────────────
+# Order matters: more specific first. Multiple matches → newline-separated.
 TYPE_RULES = [
-    (re.compile(r'\bjump.?hour\b', re.I),           'Jump Hour'),
-    (re.compile(r'\bchronograph\b', re.I),           'Chronograph'),
-    (re.compile(r'\bchrono\b', re.I),                'Chronograph'),
-    (re.compile(r'\bmoon.?phase\b', re.I),           'Moonphase'),
-    (re.compile(r'\bdiver\b', re.I),                 'Diver'),
-    (re.compile(r'\bdive watch\b', re.I),            'Diver'),
-    (re.compile(r'\bpresidential\b', re.I),          'Presidential'),
-    (re.compile(r'\bskeleton\b', re.I),              'Skeleton'),
-    (re.compile(r'\bperpetual.?calendar\b', re.I),   'Perpetual Calendar'),
-    (re.compile(r'\btriple.?calen[de]r\b', re.I),    'Triple Calendar'),
-    (re.compile(r'\bworld.?time\b', re.I),           'World Time'),
-    (re.compile(r'\bpower.?reserve\b', re.I),        'Power Reserve'),
-    (re.compile(r'\balarm\b', re.I),                 'Alarm'),
-    (re.compile(r'\bgmt\b', re.I),                   'GMT'),
-    (re.compile(r'\bpilot\b', re.I),                 'Pilot'),
-    (re.compile(r'\baviator\b', re.I),               'Pilot'),
-    (re.compile(r'\bfield watch\b', re.I),           'Field'),
-    (re.compile(r'\btonneau\b', re.I),               'Tonneau'),
-    (re.compile(r'\btank\b', re.I),                  'Tank'),
-    (re.compile(r'\bdress\b', re.I),                 'Dress'),
-    (re.compile(r'\bdigital\b', re.I),               'Digital'),
-    (re.compile(r'\bregulator\b', re.I),             'Regulator'),
+    # Jump Hour
+    (re.compile(r'\bjump.?hour\b',          re.I), 'Jump Hour'),
+
+    # Chronograph
+    (re.compile(r'\bchronograph\b',         re.I), 'Chronograph'),
+    (re.compile(r'\bchrono\b',              re.I), 'Chronograph'),
+
+    # Diver
+    (re.compile(r'\bdiver\b',              re.I), 'Diver'),
+    (re.compile(r'\bdive watch\b',         re.I), 'Diver'),
+
+    # Pilot
+    (re.compile(r'\bpilot\b',             re.I), 'Pilot'),
+    (re.compile(r'\baviator\b',           re.I), 'Pilot'),
+    (re.compile(r'\bflieger\b',           re.I), 'Pilot'),
+
+    # Field
+    (re.compile(r'\bfield watch\b',       re.I), 'Field'),
+
+    # Military
+    (re.compile(r'\bmilitary\b',          re.I), 'Military'),
+    (re.compile(r'\bcampaign\b',          re.I), 'Military'),
+    (re.compile(r'\bbroad arrow\b',       re.I), 'Military'),
+    (re.compile(r'\bcanteen\b',           re.I), 'Military'),
+
+    # Racing
+    (re.compile(r'\bracing\b',            re.I), 'Racing'),
+    (re.compile(r'\brally\b',             re.I), 'Racing'),
+    (re.compile(r'\bmotorsport\b',        re.I), 'Racing'),
+
+    # GMT / Travel
+    (re.compile(r'\bgmt\b',               re.I), 'GMT / Travel'),
+    (re.compile(r'\bdual.?time\b',        re.I), 'GMT / Travel'),
+
+    # World Timer
+    (re.compile(r'\bworld.?time[r]?\b',   re.I), 'World Timer'),
+
+    # Skeleton
+    (re.compile(r'\bskeleton\b',          re.I), 'Skeleton'),
+    (re.compile(r'\bskeletal\b',          re.I), 'Skeleton'),
+    (re.compile(r'\bopenwork\b',          re.I), 'Skeleton'),
+    (re.compile(r'\bopen work\b',         re.I), 'Skeleton'),
+
+    # Open Heart
+    (re.compile(r'\bopen.?heart\b',       re.I), 'Open Heart'),
+
+    # Moonphase
+    (re.compile(r'\bmoon.?phase\b',       re.I), 'Moonphase'),
+
+    # Calendar
+    (re.compile(r'\bperpetual.?calendar\b', re.I), 'Calendar'),
+    (re.compile(r'\btriple.?calen[de]r\b',  re.I), 'Calendar'),
+    (re.compile(r'\bannual.?calendar\b',    re.I), 'Calendar'),
+    (re.compile(r'\bday.?date\b',           re.I), 'Calendar'),
+
+    # Alarm
+    (re.compile(r'\balarm\b',             re.I), 'Alarm'),
+
+    # Pocket
+    (re.compile(r'\bpocket\b',            re.I), 'Pocket'),
+
+    # Tank / Rectangular
+    (re.compile(r'\btank\b',              re.I), 'Tank / Rectangular'),
+    (re.compile(r'\btonneau\b',           re.I), 'Tank / Rectangular'),
+    (re.compile(r'\brectangular\b',       re.I), 'Tank / Rectangular'),
+
+    # Dress / Formal / Office
+    (re.compile(r'\bdress\b',             re.I), 'Dress / Formal / Office'),
+    (re.compile(r'\bformal\b',            re.I), 'Dress / Formal / Office'),
+    (re.compile(r'\bpresidential\b',      re.I), 'Dress / Formal / Office'),
+
+    # Sports
+    (re.compile(r'\bsports?\b',           re.I), 'Sports'),
+    (re.compile(r'\bsportsman\b',         re.I), 'Sports'),
+
+    # Integrated Bracelet
+    (re.compile(r'\bintegrated.?bracelet\b', re.I), 'Integrated Bracelet'),
+
+    # Everyday / Casual
+    (re.compile(r'\beveryday\b',          re.I), 'Everyday / Casual'),
+    (re.compile(r'\bcasual\b',            re.I), 'Everyday / Casual'),
 ]
 
 # ── Regex helpers ─────────────────────────────────────────────────────────────
