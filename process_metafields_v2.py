@@ -337,7 +337,7 @@ def get_watch_gender(title, size):
 
     if size:
         mm = int(size.replace('mm', ''))
-        if 34 <= mm <= 38:
+        if 33 <= mm <= 38:
             return 'Unisex'
         if mm > 38:
             return 'Men'
