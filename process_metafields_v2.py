@@ -301,10 +301,16 @@ def parse_title(title):
     return brand, size, movement
 
 
-def get_watch_type(title):
+def get_watch_type(title, brand):
     """Return watch type(s) detected in title, or empty string."""
     seen = []
     seen_canonical = set()
+
+    # HMTs are always dress watches
+    if brand.upper() == 'HMT' and 'Dress / Formal / Office' not in seen_canonical:
+        seen.append('Dress / Formal / Office')
+        seen_canonical.add('Dress / Formal / Office')
+
     for pattern, canonical in TYPE_RULES:
         if pattern.search(title) and canonical not in seen_canonical:
             seen.append(canonical)
@@ -359,7 +365,7 @@ for row in rows:
 
         # Task B: gender + type (always populate)
         row[COL_GENDER] = get_watch_gender(title, final_size)
-        row[COL_TYPE]   = get_watch_type(title)
+        row[COL_TYPE]   = get_watch_type(title, row.get(COL_BRAND, ''))
 
     else:
         # Continuation row: clear all metafields
