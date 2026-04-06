@@ -12,7 +12,7 @@ import csv
 import re
 
 INPUT_FILE  = '/home/user/shopify-watches-full-export/watch_products_export_070426.csv'
-OUTPUT_FILE = '/home/user/shopify-watches-full-export/watches-final-metafields.csv'
+OUTPUT_FILE = '/home/user/shopify-watches-full-export/watch_metafields_update_v2.csv'
 
 # ── Column names ──────────────────────────────────────────────────────────────
 COL_BRAND    = 'Watch Brand (product.metafields.custom.watch_brand)'
